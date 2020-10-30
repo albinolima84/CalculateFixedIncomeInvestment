@@ -8,22 +8,16 @@ app.use(express.urlencoded({
 }));
 
 const indexModel = require('./api/models/cdi');
-const importData = require('./api/services/import-cdi');
 
-mongoose.connect(config.connectionString, function(err, res){
-  if (err) {
-    console.log ('ERROR connecting to: ' + config.connectionString + '. ' + err);
-  } else {
-    console.log ('Succeeded connected to: ' + config.connectionString);
-    //importData.sync();
-  }
-});
+mongoose.connect(config.connectionString);
 
 app.use(express.json());
 
 const calculatorRoute = require('./api/routes/calculator-route');
+const importRoute = require('./api/routes/import-data-route');
 
 app.use('/calculator', calculatorRoute);
+app.use('/import', importRoute);
 
 app.set('port', process.env.PORT || config.get('server.port'));
 const port = app.get('port');
