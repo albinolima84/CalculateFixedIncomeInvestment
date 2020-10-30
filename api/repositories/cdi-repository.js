@@ -1,17 +1,37 @@
-const csv = require('csvtojson');
-const CDI = require('../models/cdi');
+const mongoose = require('mongoose');
+const cdi = require('../models/cdi');
+//const indexSchema = require('../models/cdi');
+const cdiIndex = mongoose.model('CDI');
+
+exports.getRates = async (investmentDate, currentDate) => {
+    let cdiResult = [];
+    var query = {
+            rateDate: {
+                        $gte: investmentDate,
+                        $lt: currentDate
+            }
+    };
+
+    cdiResult = await cdiIndex.find({}).sort({ 'rateDate': 1 });
+
+    return cdiResult;
+};
 
 exports.getAll = async () => {
-    let rates = [];
-    await csv()
-        .fromFile('./api/repositories/CDI.csv')
-        .then((json)=>{
-            let cdi;
-            json.forEach((row)=>{
-                cdi = new CDI(row['sSecurityName'], row['dtDate'].split('/').reverse().join('-'), parseFloat(row['dLastTradePrice']));
-                rates.push(cdi);
-            });
-        })
-    
-    return rates;
+    return await cdiIndex.find({}).sort({ 'rateDate': 1 });
+};
+
+exports.clear = async() => {
+    await cdiIndex.remove({});
+};
+
+exports.create = async (data) => {
+    try {
+        var newCDI = new cdiIndex(data);
+
+        await newCDI.save();
+
+    } catch (error) {
+        console.error(error);        
+    }
 };

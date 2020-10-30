@@ -3,11 +3,12 @@ const businessDayPerYar = 252;
 const rateBusinessPerYear = 1 / businessDayPerYar;
 
 getRatesInterval = async(investmentDate, currentDate) => {
-    let rates = await repository.getAll();
+    let rates = await repository.getRates(investmentDate, currentDate);
+    //rates = await repository.getAll();
 
     return rates
     .filter(function(item){
-        return item.date >= investmentDate && item.date < currentDate;
+        return item.rateDate >= investmentDate && item.rateDate < currentDate;
     });
 };
 
@@ -16,13 +17,13 @@ exports.Calculate = async(investmentDate, currentDate, cdbRate) => {
     let ratesInPeriod = [];
     let tdci_accumulated = 1;
 
-    for (let index = rates.length-1; index >= 0; index--) {
-        let cdi = rates[index].price;
+    rates.forEach(element => {
+        let cdi = element.rateValue;
         let tcdi = parseFloat((Math.pow(1 + (cdi / 100), rateBusinessPerYear) - 1).toFixed(8));
 
         tdci_accumulated += parseFloat((tcdi * cdbRate / 100).toFixed(16));
-        ratesInPeriod.push({date: rates[index].date, tcdi, tdci_accumulated});
-    }
+        ratesInPeriod.push({date: element.rateDate, tcdi, tdci_accumulated});
+    });
     
     return ratesInPeriod;
 };
