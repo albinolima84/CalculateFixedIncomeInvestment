@@ -72,11 +72,8 @@ npm start
 
 > `POST     /data-import`
 
- - Para maiores detalhes:
-```
-http://localhost:3000/swagger
+ - Para maiores detalhes: http://localhost:3000/swagger
 
-```
 
 ## Database
 
