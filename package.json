@@ -16,6 +16,7 @@
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "mongodb": "^3.6.2",
-    "mongoose": "^5.10.11"
+    "mongoose": "^5.10.11",
+    "swagger-ui-express": "^4.1.4"
   }
 }
