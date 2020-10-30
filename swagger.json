@@ -1,0 +1,210 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Fixed Income Calculator",
+      "description": "Calcula a evolução de um investimento renda fixa a partir de uma data inicial, final e percentual de rendimento de CDI."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      },
+      {
+        "url": "https://fixedincomecalculator.herokuapp.com/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Calculator",
+        "description": "Calculate investments"
+      },
+      {
+        "name": "Import",
+        "description": "Import index rates"
+      }
+    ],
+    "paths": {
+      "/import-data": {
+        "get": {
+          "summary": "Get all imported index rates",
+          "operationId": "indexRatesList",
+          "tags": [
+            "Import"
+          ],
+          "responses": {
+            "200": {
+              "description": "Returns all index rates",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CDIs"
+                  }
+                }
+              }
+            },
+            "204": {
+                "description": "NoContent",
+                "content": { }
+              },
+            "default": {
+              "description": "unexpected error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Import data to mongoDB from csv file",
+          "operationId": "importData",
+          "tags": [
+            "Import"
+          ],
+          "responses": {
+            "200": {
+              "description": "Data imported successfully"
+            },
+            "default": {
+              "description": "unexpected error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/calculator": {
+        "post": {
+          "summary": "Calculate fixed income investment",
+          "operationId": "calcFixedIncomeInvestment",
+          "tags": [
+            "Calculator"
+          ],
+          "parameters": [
+              {
+                "name": "investmentDate",
+                "in": "body",
+                "required": true,
+                "description": "Investment start date",
+                "schema": {
+                    "type": "string",
+                    "format": "AAAA-MM-DD"
+                  }
+              },
+              {
+                "name": "cdbRate",
+                "in": "body",
+                "required": true,
+                "description": "CDB rate",
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
+              },
+              {
+                "name": "currentDate",
+                "in": "body",
+                "required": true,
+                "description": "Current date",
+                "schema": {
+                  "type": "string",
+                  "format": "AAAA-MM-DD"
+                }
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "Returns all index values per day in the period between investment date and current date",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CDIs"
+                  }
+                }
+              }
+            },
+            "400": {
+                "description": "Invalid parameters",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  }
+                }
+              },
+            "default": {
+              "description": "unexpected error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "BasicAuth": []
+      },
+      {
+        "bearerAuth": []
+      }
+    ],
+    "components": {
+      "schemas": {
+        "CDI": {
+          "type": "object",
+          "required": [
+            "rateValue",
+            "rateDate"
+          ],
+          "properties": {
+            "rateValue": {
+              "type": "number",
+              "format": "double"
+            },
+            "rateDate": {
+              "type": "string",
+              "format": "AAAA-MM-DD"
+            }
+          }
+        },
+        "CDIs": {
+            "type": "array",
+                "items": {
+                "$ref": "#/components/schemas/CDI"
+            }
+        },
+        "Error": {
+          "type": "object",
+          "required": [
+            "code",
+            "message"
+          ],
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+  
