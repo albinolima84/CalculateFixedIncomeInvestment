@@ -16,7 +16,7 @@ mongoose.connect(config.connectionString);
 app.use(express.json());
 
 const calculatorRoute = require('./api/routes/calculator-route');
-const importRoute = require('./api/routes/import-data-route');
+const importRoute = require('./api/routes/data-import-route');
 
 app.use('/calculator', calculatorRoute);
 app.use('/import', importRoute);

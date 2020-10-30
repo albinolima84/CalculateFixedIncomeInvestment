@@ -26,6 +26,9 @@ exports.clear = async() => {
 };
 
 exports.create = async (data) => {
+    collection.insertMany(newKey, { ordered: false }).then((res) => {
+        console.log("Number of records inserted: " + res.insertedCount);
+        })
     try {
         var newCDI = new cdiIndex(data);
 
