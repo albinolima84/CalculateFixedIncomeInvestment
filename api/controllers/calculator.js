@@ -3,7 +3,7 @@ const rateService = require('../services/investment-calculator');
 exports.post = async (request, response) => {
     try{
         if(requestIsValid(request.body)) {
-            let rates = await rateService.Calculate(formatDate(request.body.investmentDate), formatDate(request.body.currentDate), request.body.cdbRate);
+            let rates = await rateService.Calculate(request.body.investmentDate, request.body.currentDate, request.body.cdbRate);
             response.status(200).send(rates);
         }
         else {
@@ -14,10 +14,6 @@ exports.post = async (request, response) => {
         console.log(error);
         response.status(500).json({code: 500, message: 'unexpected error'});
     }
-};
-
-formatDate = (date) => {
-    return new Date(date);    
 };
 
 requestIsValid = (parameters) => {

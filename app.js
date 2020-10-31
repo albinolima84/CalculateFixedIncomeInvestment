@@ -1,7 +1,6 @@
 const express = require('express');
 const config = require('config');
 const app = express();
-const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
@@ -10,8 +9,6 @@ app.use(express.urlencoded({
 }));
  
 const indexModel = require('./api/models/cdi');
-
-mongoose.connect(config.connectionString);
 
 app.use(express.json());
 

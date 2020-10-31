@@ -12,14 +12,14 @@ exports.post = async (request, response) => {
     }
 };
 
-exports.get = async (req, res, next) => {
+exports.get = async (request, response, next) => {
     try{
         var rates = await repository.getAll();
         if (rates.length > 0) {
-            res.status(200).send(rates);
+            response.status(200).send(rates);
         }
         else {
-            res.status(204).send();
+            response.status(204).send();
         }
         
     }

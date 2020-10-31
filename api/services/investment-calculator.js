@@ -4,12 +4,8 @@ const rateBusinessPerYear = 1 / businessDayPerYar;
 
 getRatesInterval = async(investmentDate, currentDate) => {
     let rates = await repository.getRates(investmentDate, currentDate);
-    //rates = await repository.getAll();
 
-    return rates
-    .filter(function(item){
-        return item.rateDate >= investmentDate && item.rateDate < currentDate;
-    });
+    return rates;
 };
 
 exports.Calculate = async(investmentDate, currentDate, cdbRate) => {

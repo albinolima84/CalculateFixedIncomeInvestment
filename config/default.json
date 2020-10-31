@@ -2,5 +2,7 @@
     "server": {
       "port" : 3000
     },
-    "connectionString": "mongodb+srv://auth:uQlWz4ImxfVlAtPu@cluster0.jsios.mongodb.net/IndexRates?retryWrites=true&w=majority"
+    "connectionString": "mongodb+srv://auth:uQlWz4ImxfVlAtPu@cluster0.jsios.mongodb.net/?retryWrites=true&w=majority",
+    "database": "IndexRates",
+    "collection": "CDI"
   }

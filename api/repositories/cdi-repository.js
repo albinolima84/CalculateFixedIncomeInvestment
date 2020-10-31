@@ -1,40 +1,69 @@
-const mongoose = require('mongoose');
-const cdi = require('../models/cdi');
-//const indexSchema = require('../models/cdi');
-const cdiIndex = mongoose.model('CDI');
+const config = require('config');
+const { MongoClient } = require("mongodb");
+const uri = config.connectionString;
+const client = new MongoClient(uri, {useUnifiedTopology: true});
 
 exports.getRates = async (investmentDate, currentDate) => {
-    let cdiResult = [];
-    var query = {
+    let cdi = [];
+    let query = {
             rateDate: {
                         $gte: investmentDate,
                         $lt: currentDate
             }
     };
 
-    cdiResult = await cdiIndex.find({}).sort({ 'rateDate': 1 });
+    let options = {
+        sort: { rateDate: 1 },
+        projection: { _id: 0, rateDate: 1, rateValue: 1 },
+    };
 
-    return cdiResult;
+    await client.connect();
+    const database = client.db(config.database);
+    const collection = database.collection(config.collection);
+
+    let cursor = collection.find(query, options);//.sort({ 'rateDate': 1 });
+    cdi = await cursor.toArray();
+    await client.close();
+
+    return cdi;    
 };
 
 exports.getAll = async () => {
-    return await cdiIndex.find({}).sort({ 'rateDate': 1 });
+    let cdi = [];
+    await client.connect();
+    const database = client.db(config.database);
+    const collection = database.collection(config.collection);
+
+    let options = {
+        sort: { rateDate: 1 },
+        projection: { _id: 0, rateDate: 1, rateValue: 1 },
+    };
+
+    let query = {};
+
+    let cursor = collection.find(query, options).sort({ 'rateDate': 1 });
+    cdi = await cursor.toArray();
+    
+    await client.close();
+
+    return cdi;
 };
 
 exports.clear = async() => {
-    await cdiIndex.remove({});
+    
+    await client.connect();
+    const database = client.db(config.database);
+    const collection = database.collection(config.collection);
+
+    await collection.deleteMany({});
 };
 
-exports.create = async (data) => {
-    collection.insertMany(newKey, { ordered: false }).then((res) => {
-        console.log("Number of records inserted: " + res.insertedCount);
-        })
-    try {
-        var newCDI = new cdiIndex(data);
-
-        await newCDI.save();
-
-    } catch (error) {
-        console.error(error);        
-    }
+exports.import = async (docs) => {
+    await client.connect();
+    const database = client.db(config.database);
+    const collection = database.collection(config.collection);
+    
+    const options = { ordered: true };
+    const result = await collection.insertMany(docs, options);
+    console.log(`${result.insertedCount} documents were inserted`);
 };
