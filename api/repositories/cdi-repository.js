@@ -21,10 +21,8 @@ exports.getRates = async (investmentDate, currentDate) => {
     const database = client.db(config.database);
     const collection = database.collection(config.collection);
 
-    let cursor = collection.find(query, options);//.sort({ 'rateDate': 1 });
+    let cursor = collection.find(query, options);
     cdi = await cursor.toArray();
-    await client.close();
-
     return cdi;    
 };
 
@@ -44,8 +42,6 @@ exports.getAll = async () => {
     let cursor = collection.find(query, options).sort({ 'rateDate': 1 });
     cdi = await cursor.toArray();
     
-    await client.close();
-
     return cdi;
 };
 

@@ -4,7 +4,7 @@
   "description": "Calcula a evolução de um investimento renda fixa a partir de uma data inicial, final e percentual de rendimento de CDI.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon start"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
