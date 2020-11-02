@@ -8,7 +8,7 @@ exports.getRates = async (investmentDate, currentDate) => {
     let query = {
             rateDate: {
                         $gte: investmentDate,
-                        $lt: currentDate
+                        $lte: currentDate
             }
     };
 

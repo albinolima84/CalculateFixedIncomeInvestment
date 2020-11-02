@@ -11,16 +11,29 @@ getRatesInterval = async(investmentDate, currentDate) => {
 exports.Calculate = async(investmentDate, currentDate, cdbRate, investmentValue) => {
     let rates = await getRatesInterval(investmentDate, currentDate);
     let ratesInPeriod = [];
-    let tdci_accumulated = 1;
+    let cdiRateDay = 0;
+    let cdiRate = 0;
+    let cdiByCdbRate = 0;
+    let yield = 0;
+    let unitPrice = investmentValue;
+    let cdbPercent = cdbRate / 100;
 
     rates.forEach(element => {
-        let cdi = element.rateValue;
-        let tcdi = parseFloat((Math.pow(1 + (cdi / 100), rateBusinessDayPerYear) - 1).toFixed(8));
+        cdiRate = element.rateValue;
+        cdiRateDay = toFixedNumber((Math.pow(1 + (cdiRate / 100), rateBusinessDayPerYear) - 1), 8);
+        cdiByCdbRate = cdiRateDay * cdbPercent;
 
-        tdci_accumulated += parseFloat((tcdi * cdbRate / 100).toFixed(16));
-        let value = investmentValue * tdci_accumulated;
-        ratesInPeriod.push({date: element.rateDate, tcdi, tdci_accumulated, value});
+        unitPrice += yield;
+
+        ratesInPeriod.push({date: element.rateDate, unitPrice: toFixedNumber(unitPrice, 2)});
+
+        yield = toFixedNumber(unitPrice * cdiByCdbRate, 16);
     });
     
-    return ratesInPeriod;
+    return ratesInPeriod.sort((a,b) => (a.date > b.date) ? -1 : 1);
+};
+
+toFixedNumber = (num, digits, base) => {
+    var pow = Math.pow(base||10, digits);
+    return Math.round(num*pow) / pow;
 };
