@@ -11,16 +11,17 @@ getRatesInterval = async(investmentDate, currentDate) => {
 exports.Calculate = async(investmentDate, currentDate, cdbRate, investmentValue) => {
     let rates = await getRatesInterval(investmentDate, currentDate);
     let ratesInPeriod = [];
-    let tcdi = 0;
+    let cdiRateDay = 0;
     let cdiRate = 0;
     let cdiByCdbRate = 0;
     let yield = 0;
     let unitPrice = investmentValue;
+    let cdbPercent = cdbRate / 100;
 
     rates.forEach(element => {
         cdiRate = element.rateValue;
-        tcdi = toFixedNumber((Math.pow(1 + (cdiRate / 100), rateBusinessDayPerYear) - 1), 8);
-        cdiByCdbRate = tcdi * (cdbRate / 100);
+        cdiRateDay = toFixedNumber((Math.pow(1 + (cdiRate / 100), rateBusinessDayPerYear) - 1), 8);
+        cdiByCdbRate = cdiRateDay * cdbPercent;
 
         unitPrice += yield;
 
