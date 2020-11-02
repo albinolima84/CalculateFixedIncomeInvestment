@@ -34,10 +34,14 @@ npm start
 ## Estrutura
 
 ```
-    .app.js
-    .package.json
-    .README.md
-    .swagger.json
+    .dockerignore
+    .gitignore
+    app.js
+    docker-compose.yaml
+    Dockerfile
+    package.json
+    README.md
+    swagger.json
     ├── config
     |   ├── config.js
     ├── controllers

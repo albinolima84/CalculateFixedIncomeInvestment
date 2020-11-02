@@ -115,6 +115,16 @@
                   "type": "string",
                   "format": "AAAA-MM-DD"
                 }
+              },
+              {
+                "name": "investmentValue",
+                "in": "body",
+                "required": true,
+                "description": "Initial investment value",
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
               }
           ],
           "responses": {
