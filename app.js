@@ -3,6 +3,7 @@ const config = require('config');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+var cors = require('cors');
 
 app.use(express.urlencoded({
   extended: true
@@ -11,6 +12,15 @@ app.use(express.urlencoded({
 const indexModel = require('./api/models/cdi');
 
 app.use(express.json());
+
+//enables cors
+app.use(cors({
+  'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'origin': '*',
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}));
 
 const calculatorRoute = require('./api/routes/calculator-route');
 const importRoute = require('./api/routes/data-import-route');

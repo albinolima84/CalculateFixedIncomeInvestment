@@ -3,7 +3,7 @@ const rateService = require('../services/investment-calculator');
 exports.post = async (request, response) => {
     try{
         if(requestIsValid(request.body)) {
-            let rates = await rateService.Calculate(request.body.investmentDate, request.body.currentDate, request.body.cdbRate, request.body.investmentValue);
+            let rates = await rateService.Calculate(request.body.investmentDate, request.body.currentDate, parseFloat(request.body.cdbRate), parseFloat(request.body.investmentValue));
             response.status(200).send(rates);
         }
         else {

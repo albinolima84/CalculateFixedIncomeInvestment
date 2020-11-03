@@ -30,7 +30,7 @@ exports.Calculate = async(investmentDate, currentDate, cdbRate, investmentValue)
         yield = toFixedNumber(unitPrice * cdiByCdbRate, 16);
     });
     
-    return ratesInPeriod.sort((a,b) => (a.date > b.date) ? -1 : 1);
+    return ratesInPeriod;
 };
 
 toFixedNumber = (num, digits, base) => {
