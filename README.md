@@ -1,6 +1,7 @@
 # API CalculateFixedIncomeInvestment
 
 O intuito desse projeto é calcular um investimento atrelado ao CDI a partir de uma data inicial de investimento e uma data atual.
+API publicada em http://18.215.176.202:3000/
 
 ## Desenvolvendo
 
@@ -76,7 +77,7 @@ npm start
 
 > `POST     /data-import`
 
- - Para maiores detalhes: http://localhost:3000/swagger
+ - Para maiores detalhes: http://localhost:3000/swagger  ou http://18.215.176.202:3000/swagger
 
 
 ## Database
